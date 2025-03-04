@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.1'
+# ruby '3.2.1'
 
 gem 'sinatra'
 gem 'sinatra-contrib'
@@ -14,6 +14,8 @@ gem 'sinatra-activerecord'
 
 gem 'dotenv'
 gem 'http'
+
+gem 'asciiart'
 
 group :development do
   gem 'appdev_support'
