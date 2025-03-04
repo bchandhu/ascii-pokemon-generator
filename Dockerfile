@@ -16,7 +16,7 @@ COPY . .
 RUN bundle install
 
 # Expose the port Puma will run on (Render uses dynamic ports, so we expose 80 by default)
-EXPOSE 4567
+EXPOSE 80
 
 # Start the application with Puma (this assumes you have a config/puma.rb file)
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
