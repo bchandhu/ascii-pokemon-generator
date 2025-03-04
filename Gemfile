@@ -15,6 +15,8 @@ gem 'sinatra-activerecord'
 gem 'dotenv'
 gem 'http'
 
+gem 'mini_magick'
+gem 'rmagick'
 gem 'asciiart'
 
 group :development do
