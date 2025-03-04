@@ -7,7 +7,7 @@ require 'mini_magick'
 require 'rmagick'
 require 'asciiart'
 
-set :port, ENV['PORT'] || 80
+set :port, ENV['PORT'] || 3000
 
 before do
   @random_pokemon_num = rand(1..1025).to_i
