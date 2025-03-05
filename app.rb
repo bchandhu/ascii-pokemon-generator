@@ -1,13 +1,34 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'http'
-
-# AsciiArt and RMagick don't work on Render or Codespaces since I can't figure out how to install the needed dependancies. :(
 require 'mini_magick'
-require 'rmagick'
-require 'asciiart'
 
 set :port, ENV['PORT'] || 3000
+
+# ASCII conversion function
+def convert_to_ascii(image_url)
+  begin
+    image = MiniMagick::Image.open(image_url)
+    image.resize "50x50"   # Resize to make it suitable for ASCII conversion
+    image.colorspace "Gray"  # Convert to grayscale
+
+    ascii_chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
+
+    # Convert pixels to ASCII
+    ascii_art = ""
+    image.get_pixels.each do |row|
+      row.each do |pixel|
+        brightness = pixel.sum / 3  # Average RGB
+        ascii_art += ascii_chars[brightness * ascii_chars.size / 256]
+      end
+      ascii_art += "\n"
+    end
+
+    ascii_art
+  rescue => e
+    "ASCII conversion failed: #{e.message}"
+  end
+end
 
 before do
   @random_pokemon_num = rand(1..1025).to_i
@@ -19,7 +40,9 @@ get('/') do
   @pokedex_num = @random_pokemon_num
   @name = @rand_pokemon_parsed['name']
   @sprite = @rand_pokemon_parsed['sprites']['other']['official-artwork']['front_default']
-  @ascii_sprite = AsciiArt.new(@sprite.to_s).to_ascii_art(width: 50, invert_chars: true)
+
+  # Generate ASCII representation
+  @ascii_sprite = convert_to_ascii(@sprite)
 
   erb(:index)
 end
