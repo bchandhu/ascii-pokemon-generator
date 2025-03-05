@@ -1,6 +1,10 @@
 services:
-  - name: ascii-pokemon
-    type: web
-    runtime: docker
-    plan: free
-    autoDeploy: true
+  - type: web
+    name: ASCII-POKEMON-GENERATOR  # Change to your actual app name
+    env: ruby  # Ruby environment
+    plan: free  # Use the free plan to avoid charges
+    buildCommand: "./bin/render-build.sh"  # Build script
+    startCommand: "./bin/render-start.sh"  # Start script
+    envVars:
+      - key: PORT
+        value: 3000  # This should match your Puma config
