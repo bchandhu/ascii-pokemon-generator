@@ -1,9 +1,10 @@
 services:
-  - name: ascii-pokemon
-    type: web
-    runtime: docker
-    plan: free
-    envVars:
-      - key: PORT
-        value: 3000  # Render expects your app to bind to this port
-    autoDeploy: true
+  - type: web
+    name: my-app-name # the name of this service, you should change this
+    env: ruby # this app is written in ruby
+    plan: free # make sure to set this to free or you'll get billed $$$
+    buildCommand: "./bin/render-build.sh" # we already created these two files for you
+    startCommand: "./bin/render-start.sh"
+    envVars: # this section sets some ENV variables needed by Render for deployment
+      - key: SECRET_KEY_BASE
+        generateValue: true
