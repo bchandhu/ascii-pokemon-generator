@@ -1,17 +1,22 @@
 <h1>Random Pokémon Ascii Generator</h1>
-<p>Welcome to the <strong>Random Pokemon Ascii Generator</strong>.<br>Just refresh the page or click the button to randomly pick another pokémon from the Pokédex.</p>
+
+<p>
+  Welcome to the <strong>Random Pokémon Ascii Generator</strong>.<br>
+  Just refresh the page or click the button to randomly pick another pokémon from the Pokédex.
+</p>
+
 <form action="/" method="get">
   <button type="submit" class="btn btn-success">Generate another pokémon</button>
 </form>
-<div class="d-flex flex-wrap flex-row align-items-center justify-content-center m-5">
-  <h2 class=""><%= @name %></h2>
-  <p class="my-0 mx-2">Pokédex #: <strong><%= @pokedex_num %></strong></p>
+
+<div class="d-flex flex-wrap flex-row align-items-center justify-content-center mt-5">
+  <h2><%= @name || "Unknown Pokémon" %></h2>
+  <p class="my-0 mx-2">Pokédex #: <strong><%= @pokedex_num || "N/A" %></strong></p>
 </div>
+
 <div class="d-flex flex-row flex-wrap justify-content-evenly">
   <div class="d-flex align-items-center justify-content-center">
-    <img src="<%= @sprite %>" width="300px">
+    <img src="<%= @sprite || '/default.png' %>" width="300px">
   </div>
-  <pre class=""><%= @ascii_sprite %></pre>
+  <pre><%= @ascii_sprite || "No ASCII available" %></pre>
 </div>
-
-

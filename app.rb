@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'sinatra/reloader'
+require 'sinatra/reloader' if development?
 require 'http'
 require 'mini_magick'
 
@@ -9,13 +9,12 @@ set :port, ENV['PORT'] || 3000
 def convert_to_ascii(image_url)
   begin
     image = MiniMagick::Image.open(image_url)
-    image.resize "50x50"   # Resize to make it suitable for ASCII conversion
+    image.resize "50x50"   # Resize for ASCII conversion
     image.colorspace "Gray"  # Convert to grayscale
 
     ascii_chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
-
-    # Convert pixels to ASCII
     ascii_art = ""
+
     image.get_pixels.each do |row|
       row.each do |pixel|
         brightness = pixel.sum / 3  # Average RGB
@@ -30,19 +29,21 @@ def convert_to_ascii(image_url)
   end
 end
 
-before do
-  @random_pokemon_num = rand(1..1025).to_i
-  pokemon_api = HTTP.get("https://pokeapi.co/api/v2/pokemon/#{@random_pokemon_num}")
-  @rand_pokemon_parsed = pokemon_api.parse
-end
-
 get('/') do
-  @pokedex_num = @random_pokemon_num
-  @name = @rand_pokemon_parsed['name']
-  @sprite = @rand_pokemon_parsed['sprites']['other']['official-artwork']['front_default']
+  random_pokemon_num = rand(1..1025).to_i
+  pokemon_api = HTTP.get("https://pokeapi.co/api/v2/pokemon/#{random_pokemon_num}")
+  rand_pokemon_parsed = pokemon_api.parse
 
-  # Generate ASCII representation
-  @ascii_sprite = convert_to_ascii(@sprite)
+  @pokedex_num = random_pokemon_num
+  @name = rand_pokemon_parsed['name']
+  @sprite = rand_pokemon_parsed['sprites']['other']['official-artwork']['front_default']
 
-  erb(:index)
+  # Validate sprite URL before conversion
+  if @sprite.nil? || @sprite.empty?
+    @ascii_sprite = "No sprite available"
+  else
+    @ascii_sprite = convert_to_ascii(@sprite)
+  end
+
+  erb :index
 end
