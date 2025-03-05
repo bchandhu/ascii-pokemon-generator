@@ -21,7 +21,8 @@ RUN gem install bundler
 RUN bundle install
 
 # Expose the port Puma will run on
-EXPOSE 3000
+EXPOSE $PORT
+
 
 # Start the application with Puma
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
